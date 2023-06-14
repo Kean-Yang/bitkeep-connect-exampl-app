@@ -1,7 +1,9 @@
+//@ts-nocheck
 // import type { InjectedConnectorOptions } from "@wagmi/core";
 import { InjectedConnector } from "wagmi/connectors/injected";
-export type { Wallet } from "@rainbow-me/rainbowkit";
 import { getWalletConnectConnector } from "@rainbow-me/rainbowkit";
+
+import type { Wallet } from "@rainbow-me/rainbowkit";
 
 export function isAndroid(): boolean {
   return (
@@ -21,6 +23,8 @@ declare global {
 }
 
 export type InjectedConnectorOptions = {
+  chains?: [];
+  options_?: {};
   name?: string | ((detectedName: string | string[]) => string);
   getProvider?: () => NonNullable<(typeof window)["ethereum"]> | undefined;
   shimChainChangedDisconnect?: boolean;
@@ -39,6 +43,7 @@ class BitkeepConnector extends InjectedConnector {
     super({ chains, options });
 
     this.id = "Bitkeep";
+    this.provider = window && (window as any).ethereum;
     this.ready =
       typeof window != "undefined" &&
       !!this.findProvider(window?.bitkeep?.ethereum);
@@ -103,6 +108,7 @@ export const bitKeepWallet = ({
     isBitKeep(window.bitkeep.ethereum);
 
   const shouldUseWalletConnect = !isBitKeepInjected;
+
   return {
     createConnector: () => {
       const connector = shouldUseWalletConnect
@@ -113,13 +119,15 @@ export const bitKeepWallet = ({
           });
 
       const getUri = async () => {
-        const { uri } = (await connector.getProvider()).connector;
+        const provider = await connector.getProvider();
+        const { uri } = await provider.connector;
         return isAndroid()
           ? `bitkeep://?action=connect&connectType=wc&value=${encodeURIComponent(
               uri
             )}`
           : `https://bkcode.vip?value=${encodeURIComponent(uri)}`;
       };
+
       return {
         connector,
         extension: {
