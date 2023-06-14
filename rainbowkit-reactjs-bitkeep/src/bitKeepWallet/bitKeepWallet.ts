@@ -1,4 +1,3 @@
-//@ts-nocheck
 // import type { InjectedConnectorOptions } from "@wagmi/core";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { getWalletConnectConnector } from "@rainbow-me/rainbowkit";
@@ -12,7 +11,7 @@ export function isAndroid(): boolean {
 }
 
 export interface bitKeepWalletOptions {
-  chains?: [];
+  chains?: object | [];
   shimDisconnect?: boolean;
 }
 
@@ -24,7 +23,7 @@ declare global {
 
 export type InjectedConnectorOptions = {
   chains?: [];
-  options_?: {};
+  options?: {};
   name?: string | ((detectedName: string | string[]) => string);
   getProvider?: () => NonNullable<(typeof window)["ethereum"]> | undefined;
   shimChainChangedDisconnect?: boolean;
@@ -35,12 +34,15 @@ class BitkeepConnector extends InjectedConnector {
   id: string;
   ready: boolean;
   provider: NonNullable<(typeof window)["ethereum"]>;
-  constructor({ chains = [], options_ = {} }: InjectedConnectorOptions) {
-    const options = {
-      name: "BitKeep",
-      ...options_,
-    };
-    super({ chains, options });
+  options: any;
+  constructor({ chains = [], options = {} }: InjectedConnectorOptions) {
+    super({
+      chains,
+      ...{
+        name: "BitKeep",
+        ...options,
+      },
+    });
 
     this.id = "Bitkeep";
     this.provider = window && (window as any).ethereum;
@@ -97,6 +99,7 @@ function isBitKeep(ethereum: NonNullable<(typeof window)["ethereum"]>) {
   return true;
 }
 
+// to create a custom wallet using WalletConnect:
 export const bitKeepWallet = ({
   chains,
   shimDisconnect,
@@ -110,11 +113,26 @@ export const bitKeepWallet = ({
   const shouldUseWalletConnect = !isBitKeepInjected;
 
   return {
+    id: "bitKeep",
+    name: "BitKeep",
+    iconUrl: "https://bitkeep.com/favicon.ico",
+    iconBackground: "#fff",
+    iconAccent: "#f6851a",
+    downloadUrls: {
+      android: "https://bitkeep.com/en/download?type=2",
+      browserExtension:
+        "https://chrome.google.com/webstore/detail/bitkeep-crypto-nft-wallet/jiidiaalihmmhddjgbnbgdfflelocpak",
+      ios: "https://apps.apple.com/app/bitkeep/id1395301115",
+      qrCode: "https://bitkeep.com/en/download",
+    },
+    installed: !shouldUseWalletConnect ? isBitKeepInjected : undefined,
     createConnector: () => {
-      const connector = shouldUseWalletConnect
-        ? getWalletConnectConnector({ chains })
+      const chainsList: any | [] = Object.values(chains || []);
+
+      const connector: any = shouldUseWalletConnect
+        ? getWalletConnectConnector({ chains: chainsList })
         : new BitkeepConnector({
-            chains,
+            chains: chainsList,
             options: { shimDisconnect },
           });
 
@@ -132,6 +150,7 @@ export const bitKeepWallet = ({
         connector,
         extension: {
           instructions: {
+            learnMoreUrl: "https://study.bitkeep.com",
             steps: [
               {
                 description:
@@ -153,7 +172,6 @@ export const bitKeepWallet = ({
               },
             ],
           },
-          learnMoreUrl: "https://study.bitkeep.com",
         },
         mobile: {
           getUri: shouldUseWalletConnect ? getUri : undefined,
@@ -188,18 +206,5 @@ export const bitKeepWallet = ({
           : undefined,
       };
     },
-    downloadUrls: {
-      android: "https://bitkeep.com/en/download?type=2",
-      browserExtension:
-        "https://chrome.google.com/webstore/detail/bitkeep-crypto-nft-wallet/jiidiaalihmmhddjgbnbgdfflelocpak",
-      ios: "https://apps.apple.com/app/bitkeep/id1395301115",
-      qrCode: "https://bitkeep.com/en/download",
-    },
-    iconAccent: "#f6851a",
-    iconBackground: "#fff",
-    iconUrl: "https://bitkeep.com/favicon.ico",
-    id: "bitKeep",
-    installed: !shouldUseWalletConnect ? isBitKeepInjected : undefined,
-    name: "BitKeep",
   };
 };

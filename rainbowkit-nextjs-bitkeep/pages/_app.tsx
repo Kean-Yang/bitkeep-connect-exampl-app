@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
+// Import RainbowKit and wagmi.
 import {
   getDefaultWallets,
   connectorsForWallets,

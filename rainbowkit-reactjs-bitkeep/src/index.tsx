@@ -1,12 +1,8 @@
-//@ts-nocheck
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
-  getDefaultWallets,
   connectorsForWallets,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
@@ -20,8 +16,13 @@ import {
   metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { bitKeepWallet } from "./bitKeepWallet/bitKeepWallet";
+import "./index.css";
+import App from "./App";
 
-// chains, publicClient, webSocketPublicClient
+/**
+ * @description Configure your desired chains and generate the required connectors. You will also need to setup a wagmi config.
+ * @return void
+ */
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [
     mainnet,
@@ -33,8 +34,11 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   [publicProvider()]
 );
 
-console.log(chains, "chainschainschainschains");
-
+// Customizing the wallet list
+/**
+ * @description You can import individual wallets from '@rainbow-me/rainbowkit/wallets' along with the connectorsForWallets function to build your own list of wallets with their necessary connectors. This way you have full control over which wallets to display, and in which order.
+ * @return void
+ */
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
@@ -42,12 +46,17 @@ const connectors = connectorsForWallets([
       injectedWallet({ chains }),
       rainbowWallet({ chains }),
       walletConnectWallet({ chains }),
-      bitKeepWallet({ chains: chains, shimDisconnect: true }),
+      bitKeepWallet({ chains }),
       metaMaskWallet({ chains }),
     ],
   },
 ]);
 
+// You can then pass your connectors to wagmi's createConfig.
+/**
+ * @description createConfig;
+ * @return void
+ */
 const wagmiClient = createConfig({
   autoConnect: true,
   connectors,
@@ -58,8 +67,11 @@ const wagmiClient = createConfig({
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
+    {/* Wrap providers */}
+    {/* Wrap your application with RainbowKitProvider and WagmiConfig. */}
     <WagmiConfig config={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <App />
@@ -68,7 +80,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
