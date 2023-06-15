@@ -6,7 +6,7 @@ ethersjs && html Connect to the Bitkeep wallet example
 
 react links Connect to the Bitkeep wallet example
 
-## bitkeep-connect-exampl-app
+## ethersjs-reactjs-bitkeep
 
 rainbowkit+nextjs Connect to the Bitkeep wallet example
 
