@@ -1,24 +1,23 @@
-import React from "react";
+import react, { useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src="https://bitkeep.com/favicon.ico" alt="" />
-        <h1>RainbowKit + react.js connected to Bitkeep example</h1>
-      </header>
+  // const [count, setCount] = useState(0);
 
-      <div className="main-wrapper">
-        <ConnectButton
-          label="connected to Bitkeep"
-          accountStatus="address"
-          chainStatus="name"
-          showBalance
-        />
+  return (
+    <>
+      <div>
+        <header className="App-header">
+          <img src="https://bitkeep.com/favicon.ico" alt="" />
+          <h1>RainbowKit + next.js connected to Bitkeep example</h1>
+        </header>
+
+        <main>
+          <ConnectButton />
+        </main>
       </div>
-    </div>
+    </>
   );
 }
 
