@@ -10,14 +10,16 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { arbitrum, goerli, mainnet, optimism, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import {
-  injectedWallet,
-  rainbowWallet,
-  walletConnectWallet,
-  metaMaskWallet,
+  imTokenWallet,
+  ledgerWallet,
+  mewWallet,
+  okxWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { bitKeepWallet } from "./bitKeepWallet/bitKeepWallet";
+import { bitKeepWallet } from "./bitKeepWallet/bitKeepWalletV2";
 import "./index.css";
 import App from "./App";
+
+const projectId = "ce22b1c3d0c5ac1a88c1bf164be33ff5";
 
 /**
  * @description Configure your desired chains and generate the required connectors. You will also need to setup a wagmi config.
@@ -43,11 +45,11 @@ const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
-      injectedWallet({ chains }),
-      rainbowWallet({ chains }),
-      walletConnectWallet({ chains }),
-      bitKeepWallet({ chains }),
-      metaMaskWallet({ chains }),
+      bitKeepWallet({ chains, projectId }),
+      imTokenWallet({ chains, projectId }),
+      ledgerWallet({ chains, projectId }),
+      mewWallet({ chains }),
+      okxWallet({ chains, projectId }),
     ],
   },
 ]);
