@@ -56,7 +56,11 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
     zora,
     ...(NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli, baseGoerli] : []),
   ],
-  [alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID || "" }), publicProvider()]
+  [
+    // alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID || "" }),
+
+    publicProvider(),
+  ]
 );
 
 const { wallets } = getDefaultWallets({
