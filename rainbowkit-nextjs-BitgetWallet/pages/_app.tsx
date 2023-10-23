@@ -1,32 +1,17 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-
-import "./index.css";
-
+import type { AppProps } from "next/app";
+import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import {
   connectorsForWallets,
-  getDefaultWallets,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import {
-  argentWallet,
-  bitskiWallet,
-  dawnWallet,
-  imTokenWallet,
-  ledgerWallet,
-  mewWallet,
-  okxWallet,
-  omniWallet,
-  phantomWallet,
-  rabbyWallet,
-  tahoWallet,
-  xdefiWallet,
-  zerionWallet,
+  bitgetWallet,
+  walletConnectWallet,
+  rainbowWallet,
+  metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-
-import { bitKeepWallet } from "./bitKeepWallet/bitKeepWallet";
 
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
@@ -40,7 +25,6 @@ import {
   baseGoerli,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 
 const projectId = "ce22b1c3d0c5ac1a88c1bf164be33ff5";
 const NEXT_PUBLIC_ENABLE_TESTNETS = "true";
@@ -58,38 +42,21 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
   ],
   [
     // alchemyProvider({ apiKey: NEXT_PUBLIC_ALCHEMY_ID || "" }),
-
     publicProvider(),
   ]
 );
 
-const { wallets } = getDefaultWallets({
-  appName: "RainbowKit demo",
-  chains,
-  projectId,
-});
 
 const connectors = connectorsForWallets([
-  ...wallets,
   {
-    groupName: "Other",
+    groupName: "Recommended use",
     wallets: [
-      argentWallet({ chains, projectId }),
-      bitKeepWallet({ chains, projectId }),
-      bitskiWallet({ chains }),
-      dawnWallet({ chains }),
-      imTokenWallet({ chains, projectId }),
-      ledgerWallet({ chains, projectId }),
-      mewWallet({ chains }),
-      okxWallet({ chains, projectId }),
-      omniWallet({ chains, projectId }),
-      phantomWallet({ chains }),
-      rabbyWallet({ chains }),
-      tahoWallet({ chains }),
-      xdefiWallet({ chains }),
-      zerionWallet({ chains, projectId }),
+      rainbowWallet({ chains, projectId }),
+      metaMaskWallet({ chains, projectId }),
+      walletConnectWallet({ chains, projectId }),
+      bitgetWallet({ chains, projectId }),
     ],
-  },
+  }
 ]);
 
 const wagmiConfig = createConfig({
@@ -99,12 +66,14 @@ const wagmiConfig = createConfig({
   webSocketPublicClient,
 });
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
+function MyApp({ Component, pageProps }: AppProps) {
+  return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <App />
+        <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
-  </React.StrictMode>
-);
+  );
+}
+
+export default MyApp;

@@ -1,6 +1,7 @@
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 export type { Wallet } from "@rainbow-me/rainbowkit";
 import { getWalletConnectConnector, Wallet } from "@rainbow-me/rainbowkit";
+import { LegacyEip1193Adapter } from '@bitget-wallet/web3-sdk'
 
 import type { Connector } from "wagmi/connectors";
 import type { Chain } from "wagmi";
@@ -147,35 +148,35 @@ export const bitKeepWallet = ({
   const shouldUseWalletConnect = !isBitKeepInjected;
 
   return {
-    id: "bitKeep",
-    name: "BitKeep",
-    // iconUrl: async () => (await import('./bitKeepWallet.svg')).default,
-    iconUrl: "https://bitkeep.com/favicon.ico",
-    iconAccent: "#f6851a",
-    iconBackground: "#fff",
+    id: 'bitget',
+    name: 'Bitget Wallet',
+    iconUrl: async () => (await import('./bitgetWallet.svg')).default,
+    iconAccent: '#f6851a',
+    iconBackground: '#fff',
     installed: !shouldUseWalletConnect ? isBitKeepInjected : undefined,
     downloadUrls: {
-      android: "https://bitkeep.com/en/download?type=2",
-      browserExtension:
-        "https://chrome.google.com/webstore/detail/bitkeep-crypto-nft-wallet/jiidiaalihmmhddjgbnbgdfflelocpak",
-      ios: "https://apps.apple.com/app/bitkeep/id1395301115",
-      qrCode: "https://bitkeep.com/en/download",
-      mobile: "https://bitkeep.com/en/download?type=2",
+      android: 'https://web3.bitget.com/zh-CN/wallet-download?type=0',
+      ios: 'https://web3.bitget.com/zh-CN/wallet-download?type=1',
+      mobile: 'https://web3.bitget.com/zh-CN/wallet-download?type=2',
+      qrCode: 'https://web3.bitget.com/zh-CN/wallet-download',
       chrome:
-        "https://chrome.google.com/webstore/detail/bitkeep-crypto-nft-wallet/jiidiaalihmmhddjgbnbgdfflelocpak",
+        'https://chrome.google.com/webstore/detail/bitkeep-crypto-nft-wallet/jiidiaalihmmhddjgbnbgdfflelocpak',
+      browserExtension: 'https://web3.bitget.com/zh-CN/wallet-download',
     },
+
     createConnector: () => {
       const connector = shouldUseWalletConnect
         ? getWalletConnectConnector({
-            projectId,
             chains,
-            version: walletConnectVersion,
             options: walletConnectOptions,
+            projectId,
+            version: walletConnectVersion,
           })
-        : new BitKeepConnector({
+        : new InjectedConnector({
             chains,
             options: {
-              getProvider: () => providers,
+              // @ts-expect-error
+              getProvider: () => window.bitkeep.ethereum,
               ...options,
             },
           });
@@ -185,32 +186,32 @@ export const bitKeepWallet = ({
 
         return isAndroid()
           ? uri
-          : `https://bkcode.vip?value=${encodeURIComponent(uri)}`;
+          : `bitkeep://wc?uri=${encodeURIComponent(uri)}`;
       };
 
       return {
         connector,
         extension: {
           instructions: {
-            learnMoreUrl: "https://study.bitkeep.com",
+            learnMoreUrl: 'https://web3.bitget.com/zh/academy',
             steps: [
               {
                 description:
-                  "We recommend pinning BitKeep to your taskbar for quicker access to your wallet.",
-                step: "install",
-                title: "Install the BitKeep extension",
+                  'We recommend pinning BitKeep to your taskbar for quicker access to your wallet.',
+                step: 'install',
+                title: 'Install the BitKeep extension',
               },
               {
                 description:
-                  "Be sure to back up your wallet using a secure method. Never share your secret phrase with anyone.",
-                step: "create",
-                title: "Create or Import a Wallet",
+                  'Be sure to back up your wallet using a secure method. Never share your secret phrase with anyone.',
+                step: 'create',
+                title: 'Create or Import a Wallet',
               },
               {
                 description:
-                  "Once you set up your wallet, click below to refresh the browser and load up the extension.",
-                step: "refresh",
-                title: "Refresh your browser",
+                  'Once you set up your wallet, click below to refresh the browser and load up the extension.',
+                step: 'refresh',
+                title: 'Refresh your browser',
               },
             ],
           },
@@ -223,25 +224,25 @@ export const bitKeepWallet = ({
               getUri: async () =>
                 getWalletConnectUri(connector, walletConnectVersion),
               instructions: {
-                learnMoreUrl: "https://study.bitkeep.com",
+                learnMoreUrl: 'https://web3.bitget.com/zh/academy',
                 steps: [
                   {
                     description:
-                      "We recommend putting BitKeep on your home screen for quicker access.",
-                    step: "install",
-                    title: "Open the BitKeep app",
+                      'We recommend putting BitKeep on your home screen for quicker access.',
+                    step: 'install',
+                    title: 'Open the BitKeep app',
                   },
                   {
                     description:
-                      "Be sure to back up your wallet using a secure method. Never share your secret phrase with anyone.",
-                    step: "create",
-                    title: "Create or Import a Wallet",
+                      'Be sure to back up your wallet using a secure method. Never share your secret phrase with anyone.',
+                    step: 'create',
+                    title: 'Create or Import a Wallet',
                   },
                   {
                     description:
-                      "After you scan, a connection prompt will appear for you to connect your wallet.",
-                    step: "scan",
-                    title: "Tap the scan button",
+                      'After you scan, a connection prompt will appear for you to connect your wallet.',
+                    step: 'scan',
+                    title: 'Tap the scan button',
                   },
                 ],
               },

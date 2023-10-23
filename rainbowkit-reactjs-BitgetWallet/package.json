@@ -10,11 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^1.0.4",
+    "@bitget-wallet/web3-sdk": "^0.0.8",
+    "@rainbow-me/rainbowkit": "^1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "viem": "~1.0.6",
-    "wagmi": "~1.2.1"
+    "viem": "^1.16.6",
+    "wagmi": "^1"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
