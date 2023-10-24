@@ -22,6 +22,11 @@
   align-items: center;
   justify-content: center;
   color: white;
+  padding: 2rem;
+}
+.App-header img{
+  width: 108px;
+  height: 108px;
 }
 
 .App-link {

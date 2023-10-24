@@ -4,8 +4,8 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Connected to Bitkeep example",
-  description: "web3-onboard + Next.js connected to Bitkeep example",
+  title: "Connected to Bitget Wallet example",
+  description: "web3-onboard + Next.js connected to Bitget Wallet example",
 };
 
 export default function RootLayout({

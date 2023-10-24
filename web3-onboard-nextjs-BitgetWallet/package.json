@@ -9,12 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bitget-wallet/web3-sdk": "^0.0.7",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",
+    "@web3-onboard/bitget": "^2.0.0",
+    "@web3-onboard/bitkeep": "^2.0.0",
+    "@web3-onboard/common": "^2.3.3",
     "@web3-onboard/core": "^2.20.1",
     "@web3-onboard/injected-wallets": "^2.10.0",
-    "@web3-onboard/trust": "^2.0.4",
+    "@web3-react/core": "^8.2.3",
+    "@web3-react/types": "^8.2.3",
     "autoprefixer": "10.4.14",
     "eslint": "8.42.0",
     "eslint-config-next": "13.4.5",
